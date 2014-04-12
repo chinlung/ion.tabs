@@ -1,4 +1,4 @@
-﻿// Ion.Tabs
+// Ion.Tabs
 // version 1.0.2 Build: 17
 // © 2013 Denis Ineshin | IonDen.com
 //
@@ -134,7 +134,14 @@
             $tabs.on("click.ionTabs", function(e){
                 e.preventDefault();
                 showPreloader();
-                setTab($(this).data("target"));
+                if (typeof settings.beforeChange === "function") {
+                    if (settings.beforeChange())
+                        setTab($(this).data("target"));
+                    else
+                        hidePreloader();
+                }
+                else
+                    setTab($(this).data("target"));
             });
 
 
@@ -220,7 +227,8 @@
 
         settings = $.extend({
             type: "hash",
-            onChange: null
+            onChange: null,
+            beforeChange: null
         }, options);
 
         getUrl();
